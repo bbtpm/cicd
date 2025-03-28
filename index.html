@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>สุ่มแนะนำ NCT127</title>
+</head>
+<body>
+  <h1>สุ่มแนะนำ NCT127</h1>
+  <button id="recommendBtn">สุ่มแนะนำเพลง</button>
+  <div id="result"></div>
+
+  <script>
+    const btn = document.getElementById('recommendBtn');
+    const resultDiv = document.getElementById('result');
+
+    btn.addEventListener('click', async () => {
+      try {
+        const response = await fetch('/.netlify/functions/randomNCT127');
+        const data = await response.json();
+        resultDiv.innerHTML = `<h2>${data.song}</h2><p>อัลบั้ม: ${data.album}</p>`;
+      } catch (error) {
+        resultDiv.textContent = "เกิดข้อผิดพลาดในการดึงข้อมูล";
+      }
+    });
+  </script>
+</body>
+</html>
