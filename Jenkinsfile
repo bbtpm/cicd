@@ -9,53 +9,72 @@ pipeline {
   }
 
   stages {
-    stage('Build') {
-      steps {
-        echo 'เริ่มการ Build แอพพลิเคชัน...'
-        // ตัวอย่างคำสั่ง Build (ปรับแก้ไขตามความเหมาะสม)
-        sh 'npm install'
-        sh 'npm run build'
-      }
+        stage('Build') {
+            agent {
+                docker {
+                    image 'node:18-alpine'
+                    reuseNode true
+                }
+            }
+            steps {
+                echo "🔧 Checking required files..."
+                sh '''
+                    test -f index.html || (echo "❌ Missing public/index.html" && exit 1)
+                    test -f functions/randomNCT127.js || (echo "❌ Missing functions/randomNCT127.js" && exit 1)
+                    echo "✅ Build check passed."
+                '''
+            }
+        }
+
+        stage('Test') {
+            agent {
+                docker {
+                    image 'node:18-alpine'
+                    reuseNode true
+                }
+            }
+            steps {
+                echo "🧪 Testing function syntax..."
+                sh '''
+                    node -e "require('./functions/randomNCT127.js'); console.log('✅ Function loaded successfully')"
+                '''
+            }
+        }
+
+        stage('Deploy') {
+            agent {
+                docker {
+                    image 'node:18-alpine'
+                    reuseNode true
+                }
+            }
+            steps {
+                echo "🚀 Deploying to Netlify..."
+                sh '''
+                    npm install netlify-cli
+                    node_modules/.bin/netlify deploy \
+                      --auth=$NETLIFY_AUTH_TOKEN \
+                      --site=$NETLIFY_SITE_ID \
+                      --dir=. \
+                      --functions=functions \
+                      --prod
+                '''
+            }
+        }
+
+        stage('Post Deploy') {
+            steps {
+                echo "✅ Deployment complete! Your app is live."
+            }
+        }
     }
 
-    stage('Test') {
-      steps {
-        echo 'เริ่มการทดสอบแอพพลิเคชัน...'
-        // ตัวอย่างคำสั่งทดสอบ (ปรับแก้ไขตามความเหมาะสม)
-        sh 'npm test'
-      }
+    post {
+        success {
+            echo "🎉 CI/CD pipeline finished successfully."
+        }
+        failure {
+            echo "❌ Pipeline failed. Check logs for details."
+        }
     }
-
-    stage('Deploy') {
-      steps {
-        echo "Deploy แอพ ${APP_NAME} ไปยัง environment: ${DEPLOY_ENV}"
-        // ตัวอย่างคำสั่ง deploy (ปรับแก้ไขให้ตรงกับ environment deployment ของคุณ)
-        // เช่น ใช้คำสั่ง scp, ssh, หรือเรียกใช้งาน script ที่เตรียมไว้สำหรับ deploy
-        sh './deploy.sh'
-      }
-    }
-
-    stage('Post deploy') {
-      steps {
-        echo 'ดำเนินการหลังการ Deploy...'
-        // ตัวอย่างคำสั่งตรวจสอบสถานะ deployment หรือแจ้งเตือน
-        sh './postDeployCheck.sh'
-      }
-    }
-  }
-
-  // ส่วน post สำหรับจัดการกับผลลัพธ์หลัง pipeline ทำงานเสร็จสิ้น
-  post {
-    always {
-      echo 'Pipeline สิ้นสุดลงแล้ว - ทำความสะอาดงานหรือแจ้งเตือนได้ที่นี่'
-      // ตัวอย่างคำสั่ง cleanup
-      sh 'rm -rf temp/'
-    }
-    success {
-      echo 'Pipeline ทำงานสำเร็จ'
-    }
-    failure {
-      echo 'Pipeline พบข้อผิดพลาด'
-    }
-  }
 }
