@@ -4,8 +4,8 @@ pipeline {
 
   // กำหนด environment variables (ถ้ามี)
   environment {
-     NETLIFY_SITE_ID = '42dd4a42-af36-4c76-80fe-2ee8c85ccffe'
-        NETLIFY_AUTH_TOKEN = credentials('netlify-token')
+     NETLIFY_SITE_ID = 'df186cfc-0fd4-4ec3-8aa7-14521a0bad15'
+     NETLIFY_AUTH_TOKEN = credentials('netlify-token')
   }
 
   stages {
