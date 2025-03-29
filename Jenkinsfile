@@ -30,6 +30,12 @@ pipeline {
           reuseNode true
         }
       }
+      steps {
+        echo "🧹 กำลังตรวจสอบ syntax ของฟังก์ชัน..."
+        sh '''
+          node -e "require('./functions/randomNCT127.js'); console.log('📦 โหลดฟังก์ชันได้สำเร็จ')"
+        '''
+      }
     }
 
     stage('Deploy') {
