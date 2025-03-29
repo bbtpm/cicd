@@ -2,120 +2,192 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-  <title>🍏 First Fruit - Mark Lee | Random Song Recommender</title>
+  <title>🍏 The Firstfruit - Mark Lee | Album Experience</title>
   <style>
     body {
       font-family: "Segoe UI", sans-serif;
       background: linear-gradient(135deg, #fff0f5, #fce4ec);
       color: #333;
-      max-width: 800px;
-      margin: 50px auto;
-      padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0 0 25px rgba(0, 0, 0, 0.1);
-      text-align: center;
-      transition: all 0.3s ease;
+      max-width: 960px;
+      margin: 40px auto;
+      padding: 20px;
     }
 
     h1 {
       color: #d63384;
-      font-size: 2.8em;
+      font-size: 3em;
+      text-align: center;
       margin-bottom: 0.2em;
     }
 
-    img.cover {
-      width: 240px;
-      border-radius: 16px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
-      margin-top: 10px;
+    h2 {
+      text-align: center;
+      color: #555;
+      margin-bottom: 30px;
     }
 
-    button {
-      padding: 12px 26px;
-      font-size: 1rem;
-      background-color: #d63384;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      margin-top: 30px;
-      transition: background 0.3s;
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 20px;
     }
 
-    button:hover {
-      background-color: #b42c6f;
-    }
-
-    .result {
-      margin-top: 40px;
-      padding: 20px;
+    .card {
       background: white;
       border-radius: 16px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.05);
-      animation: fadeIn 0.5s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      padding: 20px;
+      transition: transform 0.2s;
+      cursor: pointer;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+    }
+
+    .card img {
+      width: 100%;
+      border-radius: 12px;
+      margin-bottom: 15px;
     }
 
     .song-title {
-      font-size: 1.4rem;
       font-weight: bold;
-      margin-bottom: 12px;
-      color: #444;
+      font-size: 1.1rem;
+      margin-bottom: 8px;
     }
 
     .quote {
       font-style: italic;
       color: #666;
+      font-size: 0.95rem;
+      margin-bottom: 10px;
     }
 
-    .song-image {
-      margin-top: 20px;
-      width: 100%;
-      max-width: 300px;
+    .player-container {
+      margin-top: 40px;
+      text-align: center;
+    }
+
+    iframe.spotify-player {
       border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+      width: 100%;
+      height: 152px;
     }
   </style>
 </head>
 <body>
-  <h1>🍏 First Fruit</h1>
-  <h2>Mark Lee - Random Song Recommender</h2>
+  <h1>🍏 The Firstfruit 🍏</h1>
+  <h2>Mark Lee – Album Experience</h2>
 
-  <img src="img/cover.jpg" alt="First Fruit Album Cover" class="cover">
+  <div class="grid" id="songGrid"></div>
 
-  <button onclick="recommend()">🎲 สุ่มเพลง</button>
-
-  <div class="result" id="result"></div>
+  <div class="player-container">
+    <h3 id="nowPlayingTitle"></h3>
+    <iframe id="spotifyPlayer" class="spotify-player" src="" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+  </div>
 
   <script>
     const songs = [
-      { title: "Toronto's Window", quote: "🪟 Keep Your Valuable Belongings Safe", image: "img/IMG_3232.jpg" },
-      { title: "1999", quote: "🎫 Please Sit in Your Assigned Seat Number", image: "img/IMG_3233.jpg" },
-      { title: "Flight to NYC", quote: "✈️ Sit Back, Chill, and Enjoy the Flight", image: "img/IMG_3234.jpg" },
-      { title: "Righteous", quote: "🌿 Find Your Private Spot", image: "img/IMG_3235.jpg" },
-      { title: "Fraktsiya (feat. Youngji)", quote: "🎶 Let the Music Bring Back Your Journey", image: "img/IMG_3236.jpg" },
-      { title: "Raincouver", quote: "☔ Always Take an Umbrella, Whatever the Weather", image: "img/IMG_3237.jpg" },
-      { title: "Loser", quote: "🎞 Watch a Movie to Pass Time on Long Flights", image: "img/IMG_3238.jpg" },
-      { title: "Watching TV (feat. Crush)", quote: "👫 Be With Friends! Every Moment Becomes a Great Memory!", image: "img/IMG_3239.jpg" },
-      { title: "+82 Pressin' (feat. Haechan)", quote: "🛬 Meet a Friend at the Destination", image: "img/IMG_3240.jpg" },
-      { title: "200", quote: "🍱 Choose Your In-Flight Meal in Advance", image: "img/IMG_3241.jpg" },
-      { title: "Journey Mercies", quote: "😴 Can't Sleep? Try Lo-Fi Music", image: "img/IMG_3242.jpg" },
-      { title: "Mom's Interlude", quote: "💌 Remember Those Who Think of You", image: "img/IMG_3243.jpg" },
-      { title: "Too Much", quote: "🙏 Say Thank You Often", image: "img/IMG_3244.jpg" }
+      {
+        title: "Toronto's Window",
+        quote: "🪟 Keep Your Valuable Belongings Safe",
+        image: "img/IMG_3232.jpg",
+        spotify: "0uN5M7ZL4QMj8kq72ExfBo"
+      },
+      {
+        title: "1999",
+        quote: "🎫 Please Sit in Your Assigned Seat Number",
+        image: "img/IMG_3233.jpg",
+        spotify: "1EXAMPLE1999"
+      },
+      {
+        title: "Flight to NYC",
+        quote: "✈️ Sit Back, Chill, and Enjoy the Flight",
+        image: "img/IMG_3234.jpg",
+        spotify: "1EXAMPLEFLIGHT"
+      },
+      {
+        title: "Righteous",
+        quote: "🌿 Find Your Private Spot",
+        image: "img/IMG_3235.jpg",
+        spotify: "1EXAMPLERIGHTEOUS"
+      },
+      {
+        title: "Fraktsiya (feat. Lee Young Ji)",
+        quote: "🎶 Let the Music Bring Back Your Journey",
+        image: "img/IMG_3236.jpg",
+        spotify: "1EXAMPLEFRAKTSIYA"
+      },
+      {
+        title: "Raincouver",
+        quote: "☔ Always Take an Umbrella, Whatever the Weather",
+        image: "img/IMG_3237.jpg",
+        spotify: "1EXAMPLERAINCOUVER"
+      },
+      {
+        title: "Loser",
+        quote: "🎞 Watch a Movie to Pass Time on Long Flights",
+        image: "img/IMG_3238.jpg",
+        spotify: "1EXAMPLELOSER"
+      },
+      {
+        title: "Watching TV (feat. Crush)",
+        quote: "👫 Be With Friends! Every Moment Becomes a Great Memory!",
+        image: "img/IMG_3239.jpg",
+        spotify: "1EXAMPLEWATCHINGTV"
+      },
+      {
+        title: "+82 Pressin' (feat. Haechan)",
+        quote: "🛬 Meet a Friend at the Destination",
+        image: "img/IMG_3240.jpg",
+        spotify: "1EXAMPLEPRESSIN"
+      },
+      {
+        title: "200",
+        quote: "🍱 Choose Your In-Flight Meal in Advance",
+        image: "img/IMG_3241.jpg",
+        spotify: "1EXAMPLE200"
+      },
+      {
+        title: "Journey Mercies",
+        quote: "😴 Can't Sleep? Try Lo-Fi Music",
+        image: "img/IMG_3242.jpg",
+        spotify: "1EXAMPLEJOURNEY"
+      },
+      {
+        title: "Mom's Interlude",
+        quote: "💌 Remember Those Who Think of You",
+        image: "img/IMG_3243.jpg",
+        spotify: "1EXAMPLEMOM"
+      },
+      {
+        title: "Too Much",
+        quote: "🙏 Say Thank You Often",
+        image: "img/IMG_3244.jpg",
+        spotify: "1EXAMPLETOOMUCH"
+      }
     ];
 
-    function recommend() {
-      const song = songs[Math.floor(Math.random() * songs.length)];
-      document.getElementById('result').innerHTML = `
-        <div class="song-title">🎧 เพลงแนะนำ: ${song.title}</div>
+    const songGrid = document.getElementById("songGrid");
+    const player = document.getElementById("spotifyPlayer");
+    const nowPlaying = document.getElementById("nowPlayingTitle");
+
+    songs.forEach(song => {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.innerHTML = `
+        <img src="${song.image}" alt="${song.title}">
+        <div class="song-title">${song.title}</div>
         <div class="quote">${song.quote}</div>
-        <img src="${song.image}" class="song-image" alt="${song.title}">
       `;
-    }
+      card.addEventListener("click", () => {
+        nowPlaying.innerText = `♫ Now Playing: ${song.title}`;
+        player.src = `https://open.spotify.com/embed/track/${song.spotify}`;
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+      });
+      songGrid.appendChild(card);
+    });
   </script>
 </body>
 </html>

@@ -1,80 +1,77 @@
 pipeline {
-  // ระบุ agent ที่ใช้รัน pipeline (สามารถระบุ node label เฉพาะได้ถ้าต้องการ)
   agent any
 
-  // กำหนด environment variables (ถ้ามี)
   environment {
-     NETLIFY_SITE_ID = 'df186cfc-0fd4-4ec3-8aa7-14521a0bad15'
-     NETLIFY_AUTH_TOKEN = credentials('netlify-token')
+    NETLIFY_SITE_ID = 'df186cfc-0fd4-4ec3-8aa7-14521a0bad15'
+    NETLIFY_AUTH_TOKEN = credentials('netlify-token')
   }
 
   stages {
-        stage('Build') {
-            agent {
-                docker {
-                    image 'node:18-alpine'
-                    reuseNode true
-                }
-            }
-            steps {
-                echo "🔧 Checking required files..."
-                sh '''
-                    test -f index.html || (echo "❌ Missing public/index.html" && exit 1)
-                    test -f functions/randomNCT127.js || (echo "❌ Missing functions/randomNCT127.js" && exit 1)
-                    echo "✅ Build check passed."
-                '''
-            }
+    stage('Build') {
+      agent {
+        docker {
+          image 'node:18-alpine'
+          reuseNode true
         }
-
-        stage('Test') {
-            agent {
-                docker {
-                    image 'node:18-alpine'
-                    reuseNode true
-                }
-            }
-            steps {
-                echo "🧪 Testing function syntax..."
-                sh '''
-                    node -e "require('./functions/randomNCT127.js'); console.log('✅ Function loaded successfully')"
-                '''
-            }
-        }
-
-        stage('Deploy') {
-            agent {
-                docker {
-                    image 'node:18-alpine'
-                    reuseNode true
-                }
-            }
-            steps {
-                echo "🚀 Deploying to Netlify..."
-                sh '''
-                    npm install netlify-cli
-                    node_modules/.bin/netlify deploy \
-                      --auth=$NETLIFY_AUTH_TOKEN \
-                      --site=$NETLIFY_SITE_ID \
-                      --dir=. \
-                      --functions=functions \
-                      --prod
-                '''
-            }
-        }
-
-        stage('Post Deploy') {
-            steps {
-                echo "✅ Deployment complete! Your app is live."
-            }
-        }
+      }
+      steps {
+        echo "🔍 ตรวจสอบไฟล์ที่จำเป็นสำหรับการ build..."
+        sh '''
+          test -f index.html || (echo "🚫 ไม่พบไฟล์ public/index.html!" && exit 1)
+          echo "✅ พร้อมสำหรับขั้นตอน build แล้ว"
+        '''
+      }
     }
 
-    post {
-        success {
-            echo "🎉 CI/CD pipeline finished successfully."
+    stage('Test') {
+      agent {
+        docker {
+          image 'node:18-alpine'
+          reuseNode true
         }
-        failure {
-            echo "❌ Pipeline failed. Check logs for details."
-        }
+      }
+      steps {
+        echo "🧹 กำลังตรวจสอบ syntax ของฟังก์ชัน..."
+        sh '''
+          node -e "require('./functions/randomNCT127.js'); console.log('📦 โหลดฟังก์ชันได้สำเร็จ')"
+        '''
+      }
     }
+
+    stage('Deploy') {
+      agent {
+        docker {
+          image 'node:18-alpine'
+          reuseNode true
+        }
+      }
+      steps {
+        echo "📤 เริ่มต้น Deploy โปรเจกต์ไปยัง Netlify..."
+        sh '''
+          npm install netlify-cli
+          node_modules/.bin/netlify deploy \
+            --auth=$NETLIFY_AUTH_TOKEN \
+            --site=$NETLIFY_SITE_ID \
+            --dir=. \
+            --functions=functions \
+            --prod
+        '''
+      }
+    }
+
+    stage('Post Deploy') {
+      steps {
+        echo "🌐 Deploy เสร็จเรียบร้อย! เว็บไซต์ของคุณออนไลน์แล้ว"
+      }
+    }
+  }
+
+  post {
+    success {
+      echo "✅ Pipeline ทำงานครบทุกขั้นตอนเรียบร้อยแล้ว!"
+    }
+    failure {
+      echo "⚠️ เกิดข้อผิดพลาดใน pipeline กรุณาตรวจสอบ log"
+    }
+  }
 }
