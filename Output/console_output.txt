@@ -1,0 +1,177 @@
+Started by user a
+Obtained Jenkinsfile from git https://github.com/bbtpm/cicd.git
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in /var/jenkins_home/workspace/nctmark
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Checkout SCM)
+[Pipeline] checkout
+Selected Git installation does not exist. Using Default
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse --resolve-git-dir /var/jenkins_home/workspace/nctmark/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/bbtpm/cicd.git # timeout=10
+Fetching upstream changes from https://github.com/bbtpm/cicd.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.39.5'
+ > git fetch --tags --force --progress -- https://github.com/bbtpm/cicd.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+Checking out Revision 69b7ebaf369df52054dbfa65a9dfeaa7ceed53c7 (refs/remotes/origin/main)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 69b7ebaf369df52054dbfa65a9dfeaa7ceed53c7 # timeout=10
+Commit message: "apple"
+ > git rev-list --no-walk c836cf99f3e9b052e44d8c74bff26e6f31e31152 # timeout=10
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] withCredentials
+Masking supported pattern matches of $NETLIFY_AUTH_TOKEN
+[Pipeline] {
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Build)
+[Pipeline] getContext
+[Pipeline] isUnix
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] sh
++ docker inspect -f . node:18-alpine
+.
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] withDockerContainer
+Jenkins seems to be running inside container f6c01e372dc19d50a47c023277975caed6fc882b598e1b21afa2013068c5abfe
+but /var/jenkins_home/workspace/nctmark could not be found among []
+but /var/jenkins_home/workspace/nctmark@tmp could not be found among []
+$ docker run -t -d -u 1000:1000 -w /var/jenkins_home/workspace/nctmark -v /var/jenkins_home/workspace/nctmark:/var/jenkins_home/workspace/nctmark:rw,z -v /var/jenkins_home/workspace/nctmark@tmp:/var/jenkins_home/workspace/nctmark@tmp:rw,z -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** node:18-alpine cat
+$ docker top 8bac343f7445673df74ae49a2c39b84c53589dda0fae0e619a319407277cacbe -eo pid,comm
+[Pipeline] {
+[Pipeline] echo
+🔍 ตรวจสอบไฟล์ที่จำเป็นสำหรับการ build...
+[Pipeline] sh
++ test -f index.html
++ echo '✅ พร้อมสำหรับขั้นตอน build แล้ว'
+✅ พร้อมสำหรับขั้นตอน build แล้ว
+[Pipeline] }
+$ docker stop --time=1 8bac343f7445673df74ae49a2c39b84c53589dda0fae0e619a319407277cacbe
+$ docker rm -f --volumes 8bac343f7445673df74ae49a2c39b84c53589dda0fae0e619a319407277cacbe
+[Pipeline] // withDockerContainer
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Test)
+[Pipeline] getContext
+[Pipeline] isUnix
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] sh
++ docker inspect -f . node:18-alpine
+.
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] withDockerContainer
+Jenkins seems to be running inside container f6c01e372dc19d50a47c023277975caed6fc882b598e1b21afa2013068c5abfe
+but /var/jenkins_home/workspace/nctmark could not be found among []
+but /var/jenkins_home/workspace/nctmark@tmp could not be found among []
+$ docker run -t -d -u 1000:1000 -w /var/jenkins_home/workspace/nctmark -v /var/jenkins_home/workspace/nctmark:/var/jenkins_home/workspace/nctmark:rw,z -v /var/jenkins_home/workspace/nctmark@tmp:/var/jenkins_home/workspace/nctmark@tmp:rw,z -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** node:18-alpine cat
+$ docker top daad1d1360467fbc23ecef4961ebcee432c875e188ac3b3f66b924c02891c894 -eo pid,comm
+[Pipeline] {
+[Pipeline] echo
+🧹 กำลังตรวจสอบ syntax ของฟังก์ชัน...
+[Pipeline] sh
++ node -e 'require('"'"'./functions/randomNCT127.js'"'"'); console.log('"'"'📦 โหลดฟังก์ชันได้สำเร็จ'"'"')'
+📦 โหลดฟังก์ชันได้สำเร็จ
+[Pipeline] }
+$ docker stop --time=1 daad1d1360467fbc23ecef4961ebcee432c875e188ac3b3f66b924c02891c894
+$ docker rm -f --volumes daad1d1360467fbc23ecef4961ebcee432c875e188ac3b3f66b924c02891c894
+[Pipeline] // withDockerContainer
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Deploy)
+[Pipeline] getContext
+[Pipeline] isUnix
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] sh
++ docker inspect -f . node:18-alpine
+.
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] withDockerContainer
+Jenkins seems to be running inside container f6c01e372dc19d50a47c023277975caed6fc882b598e1b21afa2013068c5abfe
+but /var/jenkins_home/workspace/nctmark could not be found among []
+but /var/jenkins_home/workspace/nctmark@tmp could not be found among []
+$ docker run -t -d -u 1000:1000 -w /var/jenkins_home/workspace/nctmark -v /var/jenkins_home/workspace/nctmark:/var/jenkins_home/workspace/nctmark:rw,z -v /var/jenkins_home/workspace/nctmark@tmp:/var/jenkins_home/workspace/nctmark@tmp:rw,z -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** node:18-alpine cat
+$ docker top c11dc71c68a87bf3d29ce7df4e299f35e7084b2256e6ea9cbe9f67b08af441df -eo pid,comm
+[Pipeline] {
+[Pipeline] echo
+📤 เริ่มต้น Deploy โปรเจกต์ไปยัง Netlify...
+[Pipeline] sh
++ npm install netlify-cli
+
+changed 1 package, and audited 1302 packages in 19s
+
+187 packages are looking for funding
+  run `npm fund` for details
+
+29 vulnerabilities (4 low, 13 moderate, 11 high, 1 critical)
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+
+Run `npm audit` for details.
++ node_modules/.bin/netlify deploy '--auth=****' '--site=df186cfc-0fd4-4ec3-8aa7-14521a0bad15' '--dir=.' '--functions=functions' --prod
+Deploy path:    /var/jenkins_home/workspace/nctmark
+Functions path: /var/jenkins_home/workspace/nctmark/functions
+Deploying to main site URL...
+- Hashing files...
+- Looking for a functions cache...
+✔ No cached functions were found
+✔ Finished hashing 22 files and 1 functions
+- CDN diffing files...
+✔ CDN requesting 3 files and 0 functions
+- Uploading 3 files
+✔ Finished uploading 3 assets
+- Waiting for deploy to go live...
+✔ Deploy is live!
+
+Build logs:        https://app.netlify.com/sites/superlative-toffee-e7464b/deploys/67e79d7f3a2219a26c8e746b
+Function logs:     https://app.netlify.com/sites/superlative-toffee-e7464b/functions
+Unique deploy URL: https://67e79d7f3a2219a26c8e746b--superlative-toffee-e7464b.netlify.app
+Website URL:       https://superlative-toffee-e7464b.netlify.app
+[Pipeline] }
+$ docker stop --time=1 c11dc71c68a87bf3d29ce7df4e299f35e7084b2256e6ea9cbe9f67b08af441df
+$ docker rm -f --volumes c11dc71c68a87bf3d29ce7df4e299f35e7084b2256e6ea9cbe9f67b08af441df
+[Pipeline] // withDockerContainer
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Post Deploy)
+[Pipeline] echo
+🌐 Deploy เสร็จเรียบร้อย! เว็บไซต์ของคุณออนไลน์แล้ว
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Declarative: Post Actions)
+[Pipeline] echo
+✅ Pipeline ทำงานครบทุกขั้นตอนเรียบร้อยแล้ว!
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // withCredentials
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+Finished: SUCCESS
