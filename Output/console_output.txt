@@ -18,11 +18,11 @@ Fetching upstream changes from https://github.com/bbtpm/cicd.git
  > git --version # 'git version 2.39.5'
  > git fetch --tags --force --progress -- https://github.com/bbtpm/cicd.git +refs/heads/*:refs/remotes/origin/* # timeout=10
  > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
-Checking out Revision 03726dc359b25de23a37cbf27c78277f4c9629a8 (refs/remotes/origin/main)
+Checking out Revision e5288a9d429857d7ec97ac0f321ea15dfb77a79c (refs/remotes/origin/main)
  > git config core.sparsecheckout # timeout=10
- > git checkout -f 03726dc359b25de23a37cbf27c78277f4c9629a8 # timeout=10
-Commit message: "a"
- > git rev-list --no-walk e400ae7b2ab037298c54ff2b7bbf9dc167cb9838 # timeout=10
+ > git checkout -f e5288a9d429857d7ec97ac0f321ea15dfb77a79c # timeout=10
+Commit message: "edited"
+ > git rev-list --no-walk 94370fe13afcb69dfcff94478162b38d300657c8 # timeout=10
 [Pipeline] }
 [Pipeline] // stage
 [Pipeline] withEnv
@@ -48,7 +48,7 @@ Jenkins seems to be running inside container f6c01e372dc19d50a47c023277975caed6f
 but /var/jenkins_home/workspace/nctmark could not be found among []
 but /var/jenkins_home/workspace/nctmark@tmp could not be found among []
 $ docker run -t -d -u 1000:1000 -w /var/jenkins_home/workspace/nctmark -v /var/jenkins_home/workspace/nctmark:/var/jenkins_home/workspace/nctmark:rw,z -v /var/jenkins_home/workspace/nctmark@tmp:/var/jenkins_home/workspace/nctmark@tmp:rw,z -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** node:18-alpine cat
-$ docker top 38079b918ade4a8d6a1480f98c0633dd2193fc80ccbc58fb9fdac8b79c9344f3 -eo pid,comm
+$ docker top e6a7d64330ea5991f62b567145ec32d73471163adddb0b37e029cc72042886f7 -eo pid,comm
 [Pipeline] {
 [Pipeline] echo
 🔍 ตรวจสอบว่า index.html อยู่ในโปรเจกต์...
@@ -57,8 +57,8 @@ $ docker top 38079b918ade4a8d6a1480f98c0633dd2193fc80ccbc58fb9fdac8b79c9344f3 -e
 + echo '✅ พร้อมเข้าสู่ขั้นตอนถัดไป'
 ✅ พร้อมเข้าสู่ขั้นตอนถัดไป
 [Pipeline] }
-$ docker stop --time=1 38079b918ade4a8d6a1480f98c0633dd2193fc80ccbc58fb9fdac8b79c9344f3
-$ docker rm -f --volumes 38079b918ade4a8d6a1480f98c0633dd2193fc80ccbc58fb9fdac8b79c9344f3
+$ docker stop --time=1 e6a7d64330ea5991f62b567145ec32d73471163adddb0b37e029cc72042886f7
+$ docker rm -f --volumes e6a7d64330ea5991f62b567145ec32d73471163adddb0b37e029cc72042886f7
 [Pipeline] // withDockerContainer
 [Pipeline] }
 [Pipeline] // stage
@@ -78,20 +78,20 @@ Jenkins seems to be running inside container f6c01e372dc19d50a47c023277975caed6f
 but /var/jenkins_home/workspace/nctmark could not be found among []
 but /var/jenkins_home/workspace/nctmark@tmp could not be found among []
 $ docker run -t -d -u 1000:1000 -w /var/jenkins_home/workspace/nctmark -v /var/jenkins_home/workspace/nctmark:/var/jenkins_home/workspace/nctmark:rw,z -v /var/jenkins_home/workspace/nctmark@tmp:/var/jenkins_home/workspace/nctmark@tmp:rw,z -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** node:18-alpine cat
-$ docker top 8f87cecf770695a1ea24ca223a3970cf88fe39a25a7188e6eb1d15d35c89b52f -eo pid,comm
+$ docker top 4c881e87597a36c792d2d7d5d1e0771dfd15b1c47413000e3e56cb5cca195968 -eo pid,comm
 [Pipeline] {
 [Pipeline] echo
 🧪 เริ่มต้นการทดสอบเนื้อหา index.html...
 [Pipeline] sh
-+ grep -o '<title>.*</title>' index.html
-+ sed -e 's/<\/?title>//g'
++ + grepsed -o -e '<title>.*</title>' 's/<\/?title>//g' index.html
+
 + TITLE='<title>🍏 The Firstfruit - Mark Lee | Album Experience</title>'
 + '[' -z '<title>🍏 The Firstfruit - Mark Lee | Album Experience</title>' ]
 + echo '✅ พบ title: <title>🍏 The Firstfruit - Mark Lee | Album Experience</title>'
 ✅ พบ title: <title>🍏 The Firstfruit - Mark Lee | Album Experience</title>
 [Pipeline] }
-$ docker stop --time=1 8f87cecf770695a1ea24ca223a3970cf88fe39a25a7188e6eb1d15d35c89b52f
-$ docker rm -f --volumes 8f87cecf770695a1ea24ca223a3970cf88fe39a25a7188e6eb1d15d35c89b52f
+$ docker stop --time=1 4c881e87597a36c792d2d7d5d1e0771dfd15b1c47413000e3e56cb5cca195968
+$ docker rm -f --volumes 4c881e87597a36c792d2d7d5d1e0771dfd15b1c47413000e3e56cb5cca195968
 [Pipeline] // withDockerContainer
 [Pipeline] }
 [Pipeline] // stage
@@ -111,18 +111,43 @@ Jenkins seems to be running inside container f6c01e372dc19d50a47c023277975caed6f
 but /var/jenkins_home/workspace/nctmark could not be found among []
 but /var/jenkins_home/workspace/nctmark@tmp could not be found among []
 $ docker run -t -d -u 1000:1000 -w /var/jenkins_home/workspace/nctmark -v /var/jenkins_home/workspace/nctmark:/var/jenkins_home/workspace/nctmark:rw,z -v /var/jenkins_home/workspace/nctmark@tmp:/var/jenkins_home/workspace/nctmark@tmp:rw,z -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** node:18-alpine cat
-$ docker top 81cedd724b4a8b063ba880d2a392c24016a4780f4bf4b4f6d1f54bf014313e4c -eo pid,comm
+$ docker top 89f065b6aef98565501aad7814c5a2abcd610fe84691c10cab11167cd3d06258 -eo pid,comm
 [Pipeline] {
 [Pipeline] echo
 🚀 Deploy เว็บของคุณไปยัง Netlify...
 [Pipeline] sh
 + npm ci
+npm error code EUSAGE
+npm error
+npm error `npm ci` can only install packages when your package.json and package-lock.json or npm-shrinkwrap.json are in sync. Please update your lock file with `npm install` before continuing.
+npm error
+npm error Missing: netlify-cli@15.11.0 from lock file
+npm error
+npm error Clean install a project
+npm error
+npm error Usage:
+npm error npm ci
+npm error
+npm error Options:
+npm error [--install-strategy <hoisted|nested|shallow|linked>] [--legacy-bundling]
+npm error [--global-style] [--omit <dev|optional|peer> [--omit <dev|optional|peer> ...]]
+npm error [--include <prod|dev|optional|peer> [--include <prod|dev|optional|peer> ...]]
+npm error [--strict-peer-deps] [--foreground-scripts] [--ignore-scripts] [--no-audit]
+npm error [--no-bin-links] [--no-fund] [--dry-run]
+npm error [-w|--workspace <workspace-name> [-w|--workspace <workspace-name> ...]]
+npm error [-ws|--workspaces] [--include-workspace-root] [--install-links]
+npm error
+npm error aliases: clean-install, ic, install-clean, isntall-clean
+npm error
+npm error Run "npm help ci" for more info
+npm error A complete log of this run can be found in: /home/node/.npm/_logs/2025-03-29T09_48_41_062Z-debug-0.log
++ npm install
 npm warn deprecated urix@0.1.0: Please see https://github.com/lydell/urix#deprecated
-npm warn deprecated source-map-resolve@0.5.3: See https://github.com/lydell/source-map-resolve#deprecated
 npm warn deprecated source-map-url@0.4.1: See https://github.com/lydell/source-map-url#deprecated
+npm warn deprecated source-map-resolve@0.5.3: See https://github.com/lydell/source-map-resolve#deprecated
 npm warn deprecated resolve-url@0.2.1: https://github.com/lydell/resolve-url#deprecated
 
-added 1301 packages, and audited 1302 packages in 46s
+added 1301 packages, and audited 1302 packages in 28s
 
 187 packages are looking for funding
   run `npm fund` for details
@@ -148,13 +173,13 @@ Deploying to main site URL...
 - Waiting for deploy to go live...
 ✔ Deploy is live!
 
-Build logs:        https://app.netlify.com/sites/superlative-toffee-e7464b/deploys/67e7bc2af55cc0ba8cf7407d
+Build logs:        https://app.netlify.com/sites/superlative-toffee-e7464b/deploys/67e7c2238a4343fd58e7611c
 Function logs:     https://app.netlify.com/sites/superlative-toffee-e7464b/functions
-Unique deploy URL: https://67e7bc2af55cc0ba8cf7407d--superlative-toffee-e7464b.netlify.app
+Unique deploy URL: https://67e7c2238a4343fd58e7611c--superlative-toffee-e7464b.netlify.app
 Website URL:       https://superlative-toffee-e7464b.netlify.app
 [Pipeline] }
-$ docker stop --time=1 81cedd724b4a8b063ba880d2a392c24016a4780f4bf4b4f6d1f54bf014313e4c
-$ docker rm -f --volumes 81cedd724b4a8b063ba880d2a392c24016a4780f4bf4b4f6d1f54bf014313e4c
+$ docker stop --time=1 89f065b6aef98565501aad7814c5a2abcd610fe84691c10cab11167cd3d06258
+$ docker rm -f --volumes 89f065b6aef98565501aad7814c5a2abcd610fe84691c10cab11167cd3d06258
 [Pipeline] // withDockerContainer
 [Pipeline] }
 [Pipeline] // stage
