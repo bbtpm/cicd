@@ -53,7 +53,7 @@ pipeline {
       steps {
         echo "🚀 Deploy เว็บของคุณไปยัง Netlify..."
         sh '''
-          npm ci || npm install
+          
           npx netlify deploy \
             --auth=$NETLIFY_AUTH_TOKEN \
             --site=$NETLIFY_SITE_ID \
