@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "../.."
+		},
+		{
+			"path": "../../../install-jenkins-docker-main"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "DevOps"
+	}
+}
